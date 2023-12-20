@@ -1,4 +1,4 @@
-%%   JICS_LaTexGuidelines.cls 2021/04/14 version 1.3
+%%   JICS_LaTexGuidelines.cls 2023/12/20 version 1.4
 %%   
 %%   This is the first released version of the LaTeX class for the authors of 
 %%   the Journal of Integrated Circuits and Systems. It is heavily based on the 
@@ -29,7 +29,7 @@
 %%   \footnotetext not supported
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{JICS_LaTexGuidelines}
-              [2021/04/14 v.1.3]
+              [2023/12/20 v.1.4]
 \RequirePackage{soul}
 % Recommended Packages %
 \RequirePackage[fleqn]{amsmath} % Provides several useful options in mathema-
@@ -197,7 +197,9 @@
 	\def\leftmark{\protect#1}%
 	\def\rightmark{\protect#2}%
 }%
-\def\myhrule{\lower1ex\null\vadjust{\hrule}}
+% \def\myhrule{\lower1ex\null\vadjust{\hrule}}
+% v.1.4 Added new definition for myrule to avoid incompatibilities with other packages
+\def\myhrule{\rule[-1ex]{\textwidth}{0.4pt}\hspace*{-\textwidth}}
 % v.0.5 Defines footnote text
 \def\footnotetext#1{\def\leftfoot{\protect#1}}
 %V.0.5
@@ -215,23 +217,23 @@
 		\hfill
 	}\relax
 %V.0.4
-	\def\@oddhead{%
+	\def\@oddhead{%  
+            \myhrule
 		\hbox{}
 		\normalfont
 		\scriptsize
 		\leftmark
 		\hfil
 		\thepage
-		\myhrule
 	}\relax
 	\def\@evenhead{%
+            \myhrule
 		\normalfont
 		\scriptsize
 		\thepage
 		\hfil
 		\rightmark
 		\hbox{}
-		\myhrule
 	}\relax
 	\let\@mkboth\markboth
 }
@@ -239,22 +241,22 @@
     \let\@oddfoot\@empty
 	\let\@evenfoot\@empty
 	\def\@oddhead{%
+            \myhrule
 		\hbox{}
 		\normalfont
 		\scriptsize
 		\leftmark
 		\hfil
 		\thepage
-		\myhrule
 	}\relax
 	\def\@evenhead{%
+            \myhrule
 		\normalfont
 		\scriptsize
 		\thepage
 		\hfil
 		\rightmark
 		\hbox{}
-		\myhrule
 	}\relax
 	\let\@mkboth\markboth
 %    \let\@mkboth\@gobbletwo
@@ -319,7 +321,11 @@
 \newcounter {paragraph}[subsubsection]
 \newcounter {subparagraph}[paragraph]
 \renewcommand \thepart {\@Roman\c@part}
-\renewcommand \thesection {\@Roman\c@section.}
+% v.1.4: changed definition of \thesection to not have the `.` at the end. 
+% this ensures the use of \ref to cite a section number.
+% TODO: Change subsection in a similar way. 
+\renewcommand \thesection {\@Roman\c@section}
+\renewcommand\@seccntformat[1]{\csname the#1\endcsname.\quad}
 \renewcommand\thesubsection   {\@Alph\c@subsection.}
 \renewcommand\thesubsubsection{\thesubsection.\@arabic\c@subsubsection}
 \renewcommand\theparagraph    {\thesubsubsection.\@arabic\c@paragraph}
